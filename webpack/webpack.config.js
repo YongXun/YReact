@@ -3,7 +3,7 @@ const webpack = require('webpack');
 //生成HTML模板
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 //分离提取CSS文件
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 //多线程打包
 const HappyPack = require('happypack');
 
@@ -20,10 +20,26 @@ module.exports = {
                 test: /\.(js|jsx)$/,
                 loader:'babel-loader',
                 exclude: /node_modules/
+            },
+            //
+            {
+                test: /\.css$/,
+                use: [
+                  {
+                      loader:MiniCssExtractPlugin.loader
+                  },
+                  "css-loader"
+                ]
             }
         ]
     },
     plugins:[
+        new MiniCssExtractPlugin({
+            // Options similar to the same options in webpackOptions.output
+            // both options are optional
+            filename: "[name].css",
+            chunkFilename: "[id].css"
+        }),
         //html模板
         new HtmlWebpackPlugin({
 　　　　 　　template: path.resolve(__dirname, '../src/index.template.html'),
